@@ -83,4 +83,57 @@ public class Solution {
 
         return Arrays.stream(dp).sum();
     }
+    
+    public static class TreeNode {
+        int val;
+        private TreeNode left;
+        private TreeNode right;
+
+        public TreeNode() {
+        }
+
+        public TreeNode(int val) {
+            this.val = val;
+        }
+
+        public TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    Map<Integer, List<TreeNode>> map = new HashMap<>();
+
+    /**
+     * 题意：给一个正整数，返回所有可能的满二叉树，满二叉树，即每个节点要么有0个子节点，要么有2个子节点
+     * @param n
+     * @return
+     */
+    public List<TreeNode> allPossibleFBT(int n) {
+        if (!map.containsKey(n)) {
+            List<TreeNode> list = new ArrayList<>();
+            if (n == 1) {
+                list.add(new TreeNode(0));
+            } else if (n % 2 == 1) {
+                // 表示一个奇数
+                for (int i = 0; i < n; i++) {
+                    // 计算右子树的长度
+                    int j = n - i - 1;
+                    for (TreeNode left : allPossibleFBT(i)) {
+                        for (TreeNode right : allPossibleFBT(j)) {
+                            TreeNode node = new TreeNode(0);
+                            node.left = left;
+                            node.right = right;
+                            list.add(node);
+                        }
+                    }
+                }
+            }
+
+            map.put(n, list);
+        }
+
+        return map.get(n);
+    }
 }
