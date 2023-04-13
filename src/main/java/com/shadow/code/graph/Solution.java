@@ -69,4 +69,21 @@ public class Solution {
             stack.pollLast();
         }
     }
+    
+    public void rotate(int[] nums, int k) {
+        // 做法：先翻转所有的数字，再翻转0，k-1，最后翻转k，n-1
+        int n = nums.length;
+        k %= n;
+        reverse(nums, 0, n - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, n - 1);
+    }
+    
+    public void reverse(int[] nums, int left, int right) {
+        while(left < right) {
+            int t = nums[left];
+            nums[left++] = nums[right];
+            nums[right--] = t;
+        }
+    }
 }
