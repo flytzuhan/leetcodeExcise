@@ -17,6 +17,7 @@ public class Solution {
     /**
      * 中等题，找出可以到达所有点的最少点数目，根据题意，可以先找到入度不为0的元素，入度不为0，表示肯定有一条线可以到达当前这个节点
      * 因此遍历edges的集合，获取到to节点的值，放入到集合中，接着遍历所有的n节点，找出入度为0的节点，这样就是要返回的值
+     * 
      * @param n
      * @param edges
      * @return
@@ -37,5 +38,35 @@ public class Solution {
             }
         }
         return list;
+    }
+    
+    /**
+     * 中等题：打印所有可能的路径，根据题意：一共有n个节点，和一个图的数组，记录此节点可以到达的其他节点，目标是打印所有从0到n-1节点的路径并打印
+     * 这种就非常适合使用深度优先算法
+     * 
+     * @param graph
+     * @return
+     */
+    public List<List<Integer>> allPathSourceTarget(int[][] graph) {
+        List<List<Integer>> resultList = new ArrayList<>();
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.offerLast(0);
+        dfs(graph, 0, graph.length - 1, stack, resultList);
+        return resultList;
+    }
+    
+    private void dfsAllPathData(int[][] graph, int x, int n, Deque<Integer> stack, List<List<Integer>> resultList) {
+        // 先处理终止条件
+        if (n == x) {
+            resultList.add(new ArrayList<>(stack));
+            return;
+        }
+
+        // 循环获取每个元素
+        for (int t : graph[x]) {
+            stack.offerLast(t);
+            dfs(graph, t, n, stack, resultList);
+            stack.pollLast();
+        }
     }
 }
