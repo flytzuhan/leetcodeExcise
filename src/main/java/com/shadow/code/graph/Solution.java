@@ -1,9 +1,6 @@
 package com.shadow.code.graph;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Solution {
 
@@ -55,7 +52,7 @@ public class Solution {
         return resultList;
     }
     
-    private void dfsAllPathData(int[][] graph, int x, int n, Deque<Integer> stack, List<List<Integer>> resultList) {
+    private void dfs(int[][] graph, int x, int n, Deque<Integer> stack, List<List<Integer>> resultList) {
         // 先处理终止条件
         if (n == x) {
             resultList.add(new ArrayList<>(stack));
@@ -85,5 +82,56 @@ public class Solution {
             nums[left++] = nums[right];
             nums[right--] = t;
         }
+    }
+
+    /**
+     * 中等题： 网络延迟，这个是使用 Dijkstra 算法来计算，重点是记住这个算法的特点
+     *
+     * @param times
+     * @param n
+     * @param k
+     * @return
+     */
+    public int networkDelayTime(int[][] times, int n, int k) {
+        final int INF = Integer.MAX_VALUE / 2;
+        // 邻接矩阵存储边信息
+        int[][] g = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(g[i], INF);
+        }
+
+        for (int[] time : times) {
+            // 边序号从0开始
+            int x = time[0] - 1, y = time[1] - 1;
+            g[x][y] = time[2];
+        }
+
+        // 从源点到某点的距离的数组
+        int[] dest = new int[n];
+        Arrays.fill(dest, INF);
+        // 假设从k开始，也就是此节点为源点
+        dest[k - 1] = 0;
+        // 节点是否被更新的数组
+        boolean[] used = new boolean[n];
+
+        for (int i = 0; i < n; i++) {
+            // 在还未确定最短路的点中，寻找距离最小的点
+            int x = -1;
+            for (int j = 0; j < n; j++) {
+                if (!used[j] && (x == -1 || dest[j] < dest[x])) {
+                    x = j;
+                }
+            }
+
+            // 记录该点已经被更新过了
+            used[x] = true;
+            for (int j = 0; j < n; j++) {
+                dest[j] = Math.min(dest[j], dest[x] + g[x][j]);
+            }
+        }
+
+        // 找到该点的最远距离
+        int ans = Arrays.stream(dest).max().getAsInt();
+        return ans == INF ? -1 : ans;
     }
 }
