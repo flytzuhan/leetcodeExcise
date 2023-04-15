@@ -134,4 +134,30 @@ public class Solution {
         int ans = Arrays.stream(dest).max().getAsInt();
         return ans == INF ? -1 : ans;
     }
+
+    /**
+     * 简单题：二叉树的中序遍历，根据题意：使用深度优先算法，先遍历左子树，再打印根节点，最后遍历右子树
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> inorderTraversal(com.shadow.code.dp.Solution.TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        // 深度优先，中序遍历
+        dfsOrder(root, list);
+
+        return list;
+    }
+
+    private void dfsOrder(com.shadow.code.dp.Solution.TreeNode root, List<Integer> list) {
+        // 终止条件，即根节点为null
+        if (root == null) {
+            return;
+        }
+
+        // 先遍历左子树
+        dfsOrder(root.left, list);
+        list.add(root.val);
+        dfsOrder(root.right, list);
+    }
 }
