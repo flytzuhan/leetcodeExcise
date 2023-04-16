@@ -160,4 +160,38 @@ public class Solution {
         list.add(root.val);
         dfsOrder(root.right, list);
     }
+
+    /**
+     * 中等题：1302，层数最深的叶子节点的和，根据题意：需要计算层数最深的叶子节点的所有数的总和，因此可以采用深度优先算法
+     * 深度优先算法，需要维护层级和总和，如果当前节点的层级超过了最大的层级的话，需要使用当前节点更新最大层级，同时维护叶子节点的和
+     * 也可以采用广度优先，这个就不需要维护层级了，只需要将根节点先写入到队列中，不断循环从队列中获取数据，判断队列是为空，如果为空，说明
+     * 已经达到了最深的叶子节点所在的层级，因此直接返回计算的值即可。
+     *
+     * @param root
+     * @return
+     */
+    public int deepestLeavesSum(com.shadow.code.dp.Solution.TreeNode root) {
+        // 使用广度优先的算法
+        int sum = 0;
+        Queue<com.shadow.code.dp.Solution.TreeNode> queue = new ArrayDeque<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            sum = 0;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                com.shadow.code.dp.Solution.TreeNode node = queue.poll();
+                if (node != null) {
+                    sum += node.val;
+                }
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+        }
+
+        return sum;
+    }
 }
