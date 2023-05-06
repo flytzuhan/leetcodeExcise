@@ -197,4 +197,108 @@ public class Solution {
 
         return list;
     }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        // 先从前序遍历中获取到根节点，然后在中序遍历中找到左子树的节点数据，构造左子树，剩下的就是右子树的节点
+        return build(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    public TreeNode build(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
+        if (preStart > preEnd) {
+            return null;
+        }
+        // 先找到根节点
+        int rootVal = preorder[preStart];
+        // 在中序遍历中找到根节点所在的索引位置
+        int index = 0;
+        for(int i = inStart; i < inEnd; i++) {
+            if (inorder[i] == rootVal) {
+                index = i;
+                break;
+            }
+        }
+        // 左子树的节点数量
+        int leftSize = index - inStart;
+        TreeNode root = new TreeNode(rootVal);
+        root.left = build(preorder, preStart + 1, preStart + leftSize, inorder, inStart + 1, index - 1);
+        root.right = build(preorder, preStart + leftSize + 1, preEnd, inorder, index + 1, inEnd);
+        return root;
+    }
+
+    public static class ListNode {
+        int val;
+        ListNode next;
+        ListNode() {}
+        ListNode(int val) {
+            this.val = val;
+        }
+        ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
+    }
+
+    public boolean hasCycle(ListNode head) {
+        // 使用快慢指针来操作，如果相遇的话，说明有环，没有的话，说明没有环
+        ListNode fast = head, slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                // 说明相遇了
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int countPrimes(int n) {
+        int count = 0;
+        for (int i = 2; i <= n; i++) {
+            if (isPrimes(n)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private boolean isPrimes(int n) {
+        for (int i = 2; i < n; i++) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        // 先使用两个指针指向这两个节点
+        ListNode p1 = l1, p2 = l2;
+        ListNode result = new ListNode(-1);
+        ListNode p = result;
+        // 定义进位情况
+        int carry = 0;
+        while (p1 != null || p2 != null || carry > 0) {
+            // 先加上进位的情况
+            int val = carry;
+            if (p1 != null) {
+                val += p1.val;
+                p1 = p1.next;
+            }
+            if (p2 != null) {
+                val += p2.val;
+                p2 = p2.next;
+            }
+            // 先计算进位
+            carry = val / 10;
+            val = val % 10;
+            // 构造出下一个节点
+            p.next = new ListNode(val);
+            p = p.next;
+        }
+        return result.next;
+    }
 }

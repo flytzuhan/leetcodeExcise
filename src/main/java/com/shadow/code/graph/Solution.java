@@ -194,4 +194,26 @@ public class Solution {
 
         return sum;
     }
+
+    public boolean isValidBST(com.shadow.code.dp.Solution.TreeNode root) {
+        // 使用中序遍历的方式进行处理
+        Deque<com.shadow.code.dp.Solution.TreeNode> stack = new LinkedList<>();
+        Integer inorder = Integer.MIN_VALUE;
+        while (!stack.isEmpty() || root != null) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            // 先获取这个值，判断是否正确
+            root = stack.pop();
+            if (root.val <= inorder) {
+                return false;
+            }
+            // 需要将inorder的值修改一下
+            inorder = root.val;
+            root = root.right;
+        }
+
+        return true;
+    }
 }
