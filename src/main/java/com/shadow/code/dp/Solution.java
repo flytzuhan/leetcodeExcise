@@ -360,4 +360,44 @@ public class Solution {
 
         return head;
     }
+
+    /**
+     * leetcode 445 两数相加II，链表的形式，所以可以使用栈的结构进行相加
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode addTwoNumbersII(ListNode l1, ListNode l2) {
+        Stack<Integer> num1 = new Stack<>();
+        while(l1 != null) {
+            num1.push(l1.val);
+            l1 = l1.next;
+        }
+        Stack<Integer> num2 = new Stack<>();
+        while (l2 != null) {
+            num2.push(l2.val);
+            l2 = l2.next;
+        }
+        // 声明返回结果的链表
+        ListNode result = new ListNode(-1);
+        // 声明进位的标志
+        int carry = 0;
+        while (!num1.isEmpty() || !num2.isEmpty() || carry > 0) {
+            // 先处理进位
+            int val = carry;
+            if (!num1.isEmpty()) {
+                val += num1.pop();
+            }
+            if (!num2.isEmpty()) {
+                val += num2.pop();
+            }
+            carry = val / 10;
+            val = val % 10;
+            ListNode newNode = new ListNode(val);
+            // 使用头插法添加链表数据
+            newNode.next = result.next;
+            result.next = newNode;
+        }
+        return result.next;
+    }
 }
